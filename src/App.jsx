@@ -24,7 +24,7 @@ function App() {
 		setTimeout(() => {
 		
  otra()
-		},1000)
+		},500)
 	}
 	
 	let ejecuta = () => {
@@ -70,7 +70,7 @@ function App() {
 							? console.log("precios",precios):''
       }
         <Container>
-        <h1>Como se llama la peli?</h1>
+        <h1>Buscar restaurantes cerca</h1>
 	 
  
 					<Row  fluid="lg" >
@@ -111,7 +111,7 @@ function App() {
             coordenadas?	<Button onClick={peticiona}>peticiona</Button> :''
           }
 
-          	<Button onClick={peticiona}>peticiona</Button>
+          	<Button onClick={peticiona}>Busca</Button>
 
           </Row>
           
