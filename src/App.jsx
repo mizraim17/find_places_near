@@ -12,13 +12,12 @@ import './App.css'
 function App() {
 
     	const [precios, setPrecios] = useState("");
+    	const [coordenadas, setCoordenadas] = useState("");
 
   
   const token = 'aa165f7a-ed0c-4c15-b6a7-ba3f0f186e4c'
-  
-  const coordenadas = '20.008535286566715,-98.82068317436814'
-
- let coordenadas_2 
+ 
+  let coordenadas_2 
 
 	let obtCoord=(otra) => {
 	 		console.log("entro al 1")
@@ -31,17 +30,17 @@ function App() {
 	let ejecuta = () => {
 		console.log("entro al 2")
 		navigator.geolocation.getCurrentPosition(position => {
-    return coordenadas_2= position
+      coordenadas_2= position
 		});
 		
 	}
 
-  obtCoord(ejecuta);
+   obtCoord(ejecuta);
 
  
 	let peticiona = () => {
 		
- console.log("coor", coordenadas_2['coords'] )
+ console.log("coor", coordenadas_2['coords']['latitude'] )
 
 
     	axios
@@ -77,7 +76,7 @@ function App() {
 					<Row  fluid="lg" >
 						{precios
             ? precios.map((el, index) => {
-                console.log("el", el)
+                
 									return (
 										<Col md={6} lg={4} sm={12} key={index}>
 											<Card style={{ width: "18rem" }} className="mt-4">
@@ -95,9 +94,11 @@ function App() {
                         <Card.Body>
                        
 													<Card.Title>{el.Nombre}</Card.Title>
-													<Card.Text>{el.Clase}</Card.Text>
+													<Card.Text>{el.Clase_actividad}</Card.Text>
 													<Card.Text>{el.Telefono}</Card.Text>
-													<Card.Text>{el.Ubicacion}</Card.Text>
+													<Card.Text>{el.Calle}</Card.Text>
+													<Card.Text>{el.Latitud}</Card.Text>
+													<Card.Text>{el.Longitud}</Card.Text>
 									 
 												</Card.Body>
 											</Card>
@@ -106,7 +107,12 @@ function App() {
 							  })
             : ""}
           
-	<Button onClick={peticiona}>peticiona</Button>
+          {
+            coordenadas?	<Button onClick={peticiona}>peticiona</Button> :''
+          }
+
+          	<Button onClick={peticiona}>peticiona</Button>
+
           </Row>
           
           
