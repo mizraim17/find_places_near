@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
  
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -11,57 +11,30 @@ import './App.css'
 
 function App() {
 
-    	const [precios, setPrecios] = useState("");
-    	const [coordenadas, setCoordenadas] = useState("");
-
-  
-  const token = 'aa165f7a-ed0c-4c15-b6a7-ba3f0f186e4c'
+		const [precios, setPrecios] = useState("");
+		const [coordenadas, setCoordenadas] = useState("");
+		const token = 'aa165f7a-ed0c-4c15-b6a7-ba3f0f186e4c'
  
-  let coordenadas_2 
-
-	let obtCoord=(otra) => {
-	 		console.log("entro al 1")
-		setTimeout(() => {
-		
- otra()
-		},500)
-	}
+	useEffect(() => {
+		navigator.geolocation.getCurrentPosition(position => {			
+			setCoordenadas(position)
+		})
+	}, []);
 	
-	let ejecuta = () => {
-		console.log("entro al 2")
-		navigator.geolocation.getCurrentPosition(position => {
-      coordenadas_2= position
-		});
-		
-	}
-
-   obtCoord(ejecuta);
-
- 
-	let peticiona = () => {
-		
- console.log("coor", coordenadas_2['coords']['latitude'] )
-
-
-    	axios
+	const peticiona = () => {
+    
+		axios
 			.get(
-        //` https://api.datos.gob.mx/v1/precio.gasolina.publico`
+				//` https://api.datos.gob.mx/v1/precio.gasolina.publico`
         
-				`https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/restaurantes/${coordenadas_2['coords']['latitude']}, ${coordenadas_2['coords']['longitude']}/2000/${token}`
+				`https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/papeleria/${coordenadas['coords']['latitude']}, ${coordenadas['coords']['longitude']}/2000/${token}`
 			)
 			.then((res) => {
-				console.log('data',res.data[0]);
-        setPrecios(res.data);
-        
-        
-			});
+				console.log('data', res.data[0]);
+				setPrecios(res.data);			
+			})
+		}
  
-	 
-};
-
- 
-  
-
   return (
     <>
        
@@ -69,34 +42,24 @@ function App() {
         precios
 							? console.log("precios",precios):''
       }
-        <Container>
-        <h1>Buscar restaurantes cerca</h1>
+      <Container fluid>
+        	<h1>Buscar restaurantes cerca</h1>
 	 
  
-					<Row  fluid="lg" >
+					<Row    >
 						{precios
             ? precios.map((el, index) => {
                 
 									return (
-										<Col md={6} lg={4} sm={12} key={index}>
-											<Card style={{ width: "18rem" }} className="mt-4">
-												{el.poster_path == null ? (
-													<Card.Img
-														variant="top"
-/>
-												) : (
-													<Card.Img
-														variant="top"
-														src={`http://image.tmdb.org/t/p/w185${el.poster_path}`}
-													/>
-												)}
- 
+										<Col  md={4} lg={4} sm={12} key={index}>
+											<Card style={{ width: "18rem" }} className="bg-red mt-5"   >
+									 
                         <Card.Body>
                        
 													<Card.Title>{el.Nombre}</Card.Title>
-													<Card.Text>{el.Clase_actividad}</Card.Text>
+													<Card.Subtitle>{el.Clase_actividad}</Card.Subtitle>
 													<Card.Text>{el.Telefono}</Card.Text>
-													<Card.Text>{el.Calle}</Card.Text>
+													<Card.Text>{el.Calle} {el.Num_Exterior}</Card.Text>
 													<Card.Text>{el.Latitud}</Card.Text>
 													<Card.Text>{el.Longitud}</Card.Text>
 									 
@@ -105,18 +68,23 @@ function App() {
 										</Col>
 									);
 							  })
-            : ""}
-          
-          {
-            coordenadas?	<Button onClick={peticiona}>peticiona</Button> :''
-          }
-
-          	<Button onClick={peticiona}>Busca</Button>
-
-          </Row>
-          
+						: ""}
+					
+						</Row>
           
 			</Container>
+			
+			<Container fluid>
+			
+				<Row >
+						<Col  md={4} lg={4} sm={12} > 
+							<Button onClick={peticiona}> buscar </Button>
+						</Col>
+				</Row>
+		
+			</Container>
+      
+
     </>
   )
 }
