@@ -22,6 +22,11 @@ p {
 	color: #51555c;
 }
 
+p.war {
+	color: aquamarine;
+	padding-top: 30px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
 	.App-logo {
 		animation: App-logo-spin infinite 20s linear;
